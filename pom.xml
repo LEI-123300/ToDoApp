@@ -53,18 +53,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <dependency>
-            <groupId>com.konghq</groupId>
-            <artifactId>unirest-java</artifactId>
-            <version>3.14.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20230227</version>
-        </dependency>
     </dependencies>
     
     <build>
@@ -126,11 +114,6 @@
     </profiles>
     
     <repositories>
-            <repository>
-                <id>konghq</id>
-                <name>KongHQ Maven Repository</name>
-                <url>https://repo1.maven.org/maven2/</url>
-            </repository>
         <repository>
             <id>vaadin-directory</id>
             <url>https://maven.vaadin.com/vaadin-addons</url>
