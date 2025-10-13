@@ -3,19 +3,29 @@ package com.example.examplefeature.ui;
 import com.example.base.ui.component.ViewToolbar;
 import com.example.examplefeature.Task;
 import com.example.examplefeature.TaskService;
+import com.example.qrcode.QRCodeUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Main;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+import java.io.ByteArrayInputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -23,6 +33,7 @@ import java.util.Optional;
 
 import static com.vaadin.flow.spring.data.VaadinSpringDataHelpers.toSpringPageRequest;
 
+@SuppressWarnings("removal")
 @Route("")
 @PageTitle("Task List")
 @Menu(order = 0, icon = "vaadin:clipboard-check", title = "Task List")
@@ -61,6 +72,45 @@ class TaskListView extends Main {
         taskGrid.addColumn(task -> Optional.ofNullable(task.getDueDate()).map(dateFormatter::format).orElse("Never"))
                 .setHeader("Due Date");
         taskGrid.addColumn(task -> dateTimeFormatter.format(task.getCreationDate())).setHeader("Creation Date");
+        // --- QR CODE COLUMN ---
+        taskGrid.addColumn(new ComponentRenderer<>(task -> {
+            Button qrBtn = new Button(new Icon(VaadinIcon.QRCODE));
+            qrBtn.getElement().setProperty("title", "Pesquisar tarefa no Google");
+
+            qrBtn.addClickListener(e -> {
+                try {
+                    // Cria o link da pesquisa Google
+                    String queryUrl = "https://www.google.com/search?q=" +
+                            URLEncoder.encode(task.getDescription(), StandardCharsets.UTF_8.name());
+
+                    // Gera o QRCode
+                    byte[] png = QRCodeUtil.generateQRCodePng(queryUrl, 300, 300);
+
+                    // Usa StreamResource (ainda funciona, mas está "deprecated")
+                    com.vaadin.flow.server.StreamResource sr =
+                            new com.vaadin.flow.server.StreamResource("qrcode.png", () -> new ByteArrayInputStream(png));
+
+                    Image qrImage = new Image(sr, "QR Code");
+                    qrImage.setWidth("300px");
+                    qrImage.setHeight("300px");
+
+                    Dialog dialog = new Dialog();
+                    dialog.add(new VerticalLayout(qrImage));
+                    dialog.setWidth("350px");
+                    dialog.setHeight("380px");
+                    dialog.open();
+
+                } catch (Exception ex) {
+                    Notification.show("Erro ao gerar QR code: " + ex.getMessage(),
+                            3000, Notification.Position.MIDDLE);
+                }
+            });
+
+
+
+
+            return qrBtn;
+        })).setHeader("QR");
         taskGrid.setSizeFull();
 
         setSizeFull();
