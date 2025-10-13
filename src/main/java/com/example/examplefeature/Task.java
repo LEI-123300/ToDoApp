@@ -27,6 +27,10 @@ public class Task {
     @Nullable
     private LocalDate dueDate;
 
+    @Column(name = "user_email")
+    @Nullable
+    private String userEmail;
+
     protected Task() { // To keep Hibernate happy
     }
 
@@ -60,6 +64,14 @@ public class Task {
 
     public void setDueDate(@Nullable LocalDate dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public @Nullable String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(@Nullable String userEmail) {
+        this.userEmail = userEmail;
     }
 
     @Override
