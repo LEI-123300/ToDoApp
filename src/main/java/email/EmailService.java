@@ -9,8 +9,8 @@ public class EmailService {
 
     private static final String SMTP_HOST = "smtp.gmail.com";
     private static final String SMTP_PORT = "587";
-    private static final String USERNAME = "tiagofranca6@gmail.com";
-    private static final String PASSWORD = "hjjvemeuweroqots";
+    private static final String USERNAME = "hostintelij@gmail.com";
+    private static final String PASSWORD = "flicyewuenqufcpd";
 
     /**
      * Envia notificação quando uma tarefa é criada
