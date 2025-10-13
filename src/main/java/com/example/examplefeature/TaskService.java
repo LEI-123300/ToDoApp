@@ -1,5 +1,6 @@
 package com.example.examplefeature;
 
+import email.EmailService;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,11 @@ public class TaskService {
         }
         var task = new Task(description, Instant.now());
         task.setDueDate(dueDate);
+        String userEmail = "tiagofranca6@gmail.com";
+        task.setUserEmail(userEmail);
+
         taskRepository.saveAndFlush(task);
+        EmailService.sendTaskCreatedNotification(userEmail, description);
     }
 
     @Transactional(readOnly = true)
