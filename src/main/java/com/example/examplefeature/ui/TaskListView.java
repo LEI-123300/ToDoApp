@@ -1,5 +1,6 @@
 package com.example.examplefeature.ui;
 
+import com.example.pdf.PdfGenerator;
 import com.example.base.ui.component.ViewToolbar;
 import com.example.examplefeature.Task;
 import com.example.examplefeature.TaskService;
@@ -23,6 +24,7 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
+
 import java.io.ByteArrayInputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -30,6 +32,8 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.vaadin.flow.spring.data.VaadinSpringDataHelpers.toSpringPageRequest;
 
@@ -44,6 +48,7 @@ class TaskListView extends Main {
     final TextField description;
     final DatePicker dueDate;
     final Button createBtn;
+    final Button exportPdfBtn;
     final Grid<Task> taskGrid;
 
     TaskListView(TaskService taskService) {
@@ -61,6 +66,9 @@ class TaskListView extends Main {
 
         createBtn = new Button("Create", event -> createTask());
         createBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        exportPdfBtn = new Button("Exportar PDF", event -> exportTasksToPdf());
+        exportPdfBtn.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
 
         var dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(getLocale())
                 .withZone(ZoneId.systemDefault());
@@ -118,6 +126,7 @@ class TaskListView extends Main {
                 LumoUtility.Padding.MEDIUM, LumoUtility.Gap.SMALL);
 
         add(new ViewToolbar("Task List", ViewToolbar.group(description, dueDate, createBtn)));
+        add(new ViewToolbar("Task List", ViewToolbar.group(description, dueDate, createBtn, exportPdfBtn)));
         add(taskGrid);
     }
 
@@ -130,4 +139,37 @@ class TaskListView extends Main {
                 .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
     }
 
+    private void exportTasksToPdf() {
+        try {
+            var tasks = taskService.findAllTasks()
+                    .stream()
+                    .map(Task::getDescription)
+                    .toList();
+
+            byte[] pdfBytes = com.example.pdf.PdfGenerator
+                    .generateTasksPdfBytes(tasks, "Lista de Tarefas");
+
+            com.vaadin.flow.server.StreamResource resource =
+                    new com.vaadin.flow.server.StreamResource("tarefas.pdf",
+                            () -> new ByteArrayInputStream(pdfBytes));
+
+            resource.setContentType("application/pdf");
+            resource.getHeaders().put("Content-Disposition", "attachment; filename=tarefas.pdf");
+
+            com.vaadin.flow.component.html.Anchor downloadLink =
+                    new com.vaadin.flow.component.html.Anchor(resource, "Clique para descarregar PDF");
+            downloadLink.getElement().setAttribute("download", true);
+
+            Dialog dialog = new Dialog();
+            dialog.add(new VerticalLayout(downloadLink));
+            dialog.setHeaderTitle("Exportação concluída");
+            dialog.open();
+
+            Notification.show("PDF gerado com sucesso!", 3000, Notification.Position.MIDDLE);
+
+        } catch (Exception e) {
+            Notification.show("Erro ao gerar PDF: " + e.getMessage(),
+                    5000, Notification.Position.MIDDLE);
+        }
+    }
 }

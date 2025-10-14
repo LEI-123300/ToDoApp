@@ -33,6 +33,11 @@ public class TaskService {
         EmailService.sendTaskCreatedNotification(userEmail, description);
     }
 
+    // -- gets every existing task from the db
+    public List<Task> findAllTasks() {
+        return taskRepository.findAll();
+    }
+
     @Transactional(readOnly = true)
     public List<Task> list(Pageable pageable) {
         return taskRepository.findAllBy(pageable).toList();
