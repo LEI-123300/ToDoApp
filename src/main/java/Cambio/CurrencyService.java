@@ -1,4 +1,4 @@
-package com.example.Cambio;
+package Cambio;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
