@@ -125,7 +125,6 @@ class TaskListView extends Main {
         addClassNames(LumoUtility.BoxSizing.BORDER, LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.Padding.MEDIUM, LumoUtility.Gap.SMALL);
 
-        add(new ViewToolbar("Task List", ViewToolbar.group(description, dueDate, createBtn)));
         add(new ViewToolbar("Task List", ViewToolbar.group(description, dueDate, createBtn, exportPdfBtn)));
         add(taskGrid);
     }
@@ -141,7 +140,8 @@ class TaskListView extends Main {
 
     private void exportTasksToPdf() {
         try {
-            var tasks = taskService.findAllTasks()
+            List<String> tasks = Optional.ofNullable(taskService.findAllTasks())
+                    .orElse(List.of()) // devolve lista vazia se for null
                     .stream()
                     .map(Task::getDescription)
                     .toList();
