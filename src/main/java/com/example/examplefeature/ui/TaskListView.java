@@ -34,6 +34,9 @@ import java.time.format.FormatStyle;
 import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.dialog.Dialog;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import static com.vaadin.flow.spring.data.VaadinSpringDataHelpers.toSpringPageRequest;
 
@@ -69,6 +72,7 @@ class TaskListView extends Main {
 
         exportPdfBtn = new Button("Exportar PDF", event -> exportTasksToPdf());
         exportPdfBtn.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
+
 
         var dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(getLocale())
                 .withZone(ZoneId.systemDefault());
@@ -141,9 +145,10 @@ class TaskListView extends Main {
     private void exportTasksToPdf() {
         try {
             List<String> tasks = Optional.ofNullable(taskService.findAllTasks())
-                    .orElse(List.of()) // devolve lista vazia se for null
+                    .orElse(List.of())
                     .stream()
                     .map(Task::getDescription)
+                    .filter(description -> !description.isBlank())
                     .toList();
 
             byte[] pdfBytes = com.example.pdf.PdfGenerator
@@ -157,16 +162,14 @@ class TaskListView extends Main {
             resource.getHeaders().put("Content-Disposition", "attachment; filename=tarefas.pdf");
 
             com.vaadin.flow.component.html.Anchor downloadLink =
-                    new com.vaadin.flow.component.html.Anchor(resource, "Clique para descarregar PDF");
+                    new com.vaadin.flow.component.html.Anchor(resource, "");
             downloadLink.getElement().setAttribute("download", true);
+            downloadLink.getElement().getStyle().set("display", "none");
 
-            Dialog dialog = new Dialog();
-            dialog.add(new VerticalLayout(downloadLink));
-            dialog.setHeaderTitle("Exportação concluída");
-            dialog.open();
+            getElement().appendChild(downloadLink.getElement());
+            downloadLink.getElement().executeJs("this.click();");
 
             Notification.show("PDF gerado com sucesso!", 3000, Notification.Position.MIDDLE);
-
         } catch (Exception e) {
             Notification.show("Erro ao gerar PDF: " + e.getMessage(),
                     5000, Notification.Position.MIDDLE);

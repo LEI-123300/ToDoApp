@@ -7,6 +7,7 @@ import com.lowagie.text.Font;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.FontFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,7 +24,7 @@ public class PdfGenerator {
 
             // Título
             Font titleFont = new Font(Font.HELVETICA, 18, Font.BOLD);
-            Paragraph titleParagraph = new Paragraph(title, titleFont);
+            Paragraph titleParagraph = new Paragraph(title != null ? title : "Lista de Tarefas", titleFont);
             titleParagraph.setAlignment(Element.ALIGN_CENTER);
             document.add(titleParagraph);
 
@@ -53,6 +54,7 @@ public class PdfGenerator {
     }
 
     public static ByteArrayInputStream toInputStream(byte[] bytes) {
+
         return new ByteArrayInputStream(bytes);
     }
 }
