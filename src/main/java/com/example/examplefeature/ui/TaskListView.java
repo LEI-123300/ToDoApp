@@ -16,7 +16,9 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.Menu;
@@ -25,6 +27,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 
 
+import com.vaadin.flow.component.html.Label;
 import java.io.ByteArrayInputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -72,6 +75,9 @@ class TaskListView extends Main {
 
         exportPdfBtn = new Button("Exportar PDF", event -> exportTasksToPdf());
         exportPdfBtn.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
+
+        Button currencyBtn = new Button("Câmbio de Moedas", e -> openCurrencyDialog());
+        currencyBtn.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
 
         var dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(getLocale())
@@ -129,7 +135,8 @@ class TaskListView extends Main {
         addClassNames(LumoUtility.BoxSizing.BORDER, LumoUtility.Display.FLEX, LumoUtility.FlexDirection.COLUMN,
                 LumoUtility.Padding.MEDIUM, LumoUtility.Gap.SMALL);
 
-        add(new ViewToolbar("Task List", ViewToolbar.group(description, dueDate, createBtn, exportPdfBtn)));
+        add(new ViewToolbar("Task List",
+                ViewToolbar.group(description, dueDate, createBtn, exportPdfBtn, currencyBtn)));
         add(taskGrid);
     }
 
@@ -144,6 +151,7 @@ class TaskListView extends Main {
 
     private void exportTasksToPdf() {
         try {
+            // Recolhe as descrições das tarefas
             List<String> tasks = Optional.ofNullable(taskService.findAllTasks())
                     .orElse(List.of())
                     .stream()
@@ -151,28 +159,79 @@ class TaskListView extends Main {
                     .filter(description -> !description.isBlank())
                     .toList();
 
-            byte[] pdfBytes = com.example.pdf.PdfGenerator
-                    .generateTasksPdfBytes(tasks, "Lista de Tarefas");
+            // Gera o PDF
+            byte[] pdfBytes = PdfGenerator.generateTasksPdfBytes(tasks, "Lista de Tarefas");
 
+            // Cria o recurso do PDF
             com.vaadin.flow.server.StreamResource resource =
                     new com.vaadin.flow.server.StreamResource("tarefas.pdf",
                             () -> new ByteArrayInputStream(pdfBytes));
-
             resource.setContentType("application/pdf");
-            resource.getHeaders().put("Content-Disposition", "attachment; filename=tarefas.pdf");
 
-            com.vaadin.flow.component.html.Anchor downloadLink =
-                    new com.vaadin.flow.component.html.Anchor(resource, "");
+            // Cria o link de download invisível
+            Anchor downloadLink = new Anchor(resource, "");
             downloadLink.getElement().setAttribute("download", true);
-            downloadLink.getElement().getStyle().set("display", "none");
+            downloadLink.getStyle().set("display", "none");
 
+            // Adiciona o link temporariamente ao layout e dispara o clique no browser
             getElement().appendChild(downloadLink.getElement());
-            downloadLink.getElement().executeJs("this.click();");
+            downloadLink.getElement().executeJs("this.click(); $0.remove();", downloadLink.getElement());
 
-            Notification.show("PDF gerado com sucesso!", 3000, Notification.Position.MIDDLE);
+            Notification.show("PDF gerado com sucesso!", 3000, Notification.Position.MIDDLE)
+                    .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+
         } catch (Exception e) {
             Notification.show("Erro ao gerar PDF: " + e.getMessage(),
-                    5000, Notification.Position.MIDDLE);
+                            5000, Notification.Position.MIDDLE)
+                    .addThemeVariants(NotificationVariant.LUMO_ERROR);
         }
+    }
+    private void openCurrencyDialog() {
+        Dialog dialog = new Dialog();
+        dialog.setHeaderTitle("Conversor de Moedas");
+
+        TextField fromField = new TextField("De (ex: EUR)");
+        TextField toField = new TextField("Para (ex: USD)");
+        NumberField amountField = new NumberField("Valor");
+        amountField.setPlaceholder("Ex: 100");
+        amountField.setWidth("100%");
+
+        Button convertBtn = new Button("Converter");
+        convertBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        Label resultLabel = new Label();
+
+        convertBtn.addClickListener(e -> {
+            try {
+                String from = fromField.getValue().trim();
+                String to = toField.getValue().trim();
+                Double amount = amountField.getValue();
+
+                if (from.isEmpty() || to.isEmpty() || amount == null) {
+                    Notification.show("Preencha todos os campos!", 3000, Notification.Position.MIDDLE)
+                            .addThemeVariants(NotificationVariant.LUMO_ERROR);
+                    return;
+                }
+
+                double result = new com.example.Cambio.CurrencyService().convert(from, to, amount);
+                resultLabel.setText(String.format("%.2f %s = %.2f %s",
+                        amount, from.toUpperCase(), result, to.toUpperCase()));
+            } catch (Exception ex) {
+                Notification.show(ex.getMessage(), 4000, Notification.Position.MIDDLE)
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            }
+        });
+
+        VerticalLayout layout = new VerticalLayout();
+        layout.add(fromField, toField, amountField, convertBtn, resultLabel);
+        layout.setPadding(false);
+        layout.setSpacing(true);
+        layout.setAlignItems(FlexComponent.Alignment.STRETCH);
+
+        dialog.add(layout);
+        dialog.setWidth("400px");
+        dialog.setHeight("auto");
+
+        dialog.open();
     }
 }
