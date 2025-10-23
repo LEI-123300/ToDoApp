@@ -32,7 +32,7 @@ jobs:
       run: mvn clean package
 
     - name: Copy jar file to the repository root
-      run: cp target/*.jar
+      run: cp target/*.jar .
 
     - name: Publish JAR Artifact
       uses: actions/upload-artifact@v4
