@@ -1,0 +1,36 @@
+Method Name;CCM;CND;CDISP;CINT;FDP;HD;HEF;HER;HL;HVC;HVL;LOC;LAA;LND;MMI;MND;CC;NOAV;NOL;NOPM
+com.example.Application.main(String[]);0;0;1,0;1;0;2,5;38,7744;0,0038;6;6;15,5098;3;0,0;0;81,3571;0;1;1;0;1
+com.example.Cambio.CurrencyService.convert(String, String, double);2;1;0,7143;7;1;10,0455;1641,9302;0,0464;34;28;163,4501;11;0,0;0;61,7001;1;2;7;0;3
+com.example.base.ui.MainErrorHandler.errorHandlerInitializer();0;0;0,7692;13;4;11,5909;1783,0916;0,049;32;28;153,8354;15;0,2;0;59,0475;2;1;8;0;0
+com.example.base.ui.MainLayout.MainLayout();0;0;0,25;2;1;2,5;38,7744;0,0038;6;6;15,5098;4;0,0;0;78,6317;0;1;1;0;0
+com.example.base.ui.MainLayout.createHeader();0;0;1,0;2;9;3,6923;423,4857;0,0188;27;19;114,694;10;0,0;0;63,7836;0;1;12;0;0
+com.example.base.ui.MainLayout.createSideNav();0;0;0,8;4;1;7,5;376,4211;0,0174;14;12;50,1895;6;0,0;0;71,1292;0;1;3;0;0
+com.example.base.ui.MainLayout.createSideNavItem(MenuEntry);2;1;0,3333;3;1;15,75;1198,6931;0,0376;22;11;76,1075;7;0,0;0;68,3023;1;2;1;0;1
+com.example.base.ui.component.ViewToolbar.ViewToolbar(String, Component[]);1;1;1,0;3;12;6,0952;1539,7486;0,0444;52;29;252,615;17;0,0;0;56,2512;1;2;20;0;2
+com.example.base.ui.component.ViewToolbar.group(Component[]);0;0;1,0;1;6;3,375;192,7473;0,0111;15;14;57,1103;6;0,0;0;70,7308;0;1;8;0;1
+com.example.examplefeature.Task.Task();0;0;0,0;0;0;0,0;0,0;0,0;1;1;0,0;2;0,0;0;∞;0;1;0;0;0
+com.example.examplefeature.Task.Task(String, Instant);0;0;0,0;0;0;1,5;23,2647;0,0027;6;6;15,5098;4;1,0;0;78,6317;0;1;3;0;2
+com.example.examplefeature.Task.equals(Object);4;1;0,75;3;0;12,6;1605,7166;0,0457;30;19;127,4378;11;1,0;0;62,3358;1;5;2;0;1
+com.example.examplefeature.Task.getCreationDate();0;0;0,0;0;0;1,0;4,7549;0,0009;3;3;4,7549;3;1,0;0;85,3765;0;1;1;0;0
+com.example.examplefeature.Task.getDescription();0;0;0,0;0;0;1,0;4,7549;0,0009;3;3;4,7549;3;1,0;0;85,3765;0;1;1;0;0
+com.example.examplefeature.Task.getDueDate();0;0;0,0;0;0;1,0;4,7549;0,0009;3;3;4,7549;3;1,0;0;85,3765;0;1;1;0;0
+com.example.examplefeature.Task.getId();0;0;0,0;0;0;1,0;4,7549;0,0009;3;3;4,7549;3;1,0;0;85,3765;0;1;1;0;0
+com.example.examplefeature.Task.getUserEmail();0;0;0,0;0;0;1,0;4,7549;0,0009;3;3;4,7549;3;1,0;0;85,3765;0;1;1;0;0
+com.example.examplefeature.Task.hashCode();0;0;0,5;2;0;0,0;0,0;0,0;5;5;11,6096;8;0,0;0;73,0082;0;1;0;0;0
+com.example.examplefeature.Task.setDescription(String);1;1;1,0;1;0;6,75;374,6695;0,0173;15;13;55,5066;6;1,0;0;70,7462;1;2;3;0;1
+com.example.examplefeature.Task.setDueDate(LocalDate);0;0;0,0;0;0;1,5;17,4145;0,0022;5;5;11,6096;3;1,0;0;82,3002;0;1;2;0;1
+com.example.examplefeature.Task.setUserEmail(String);0;0;0,0;0;0;1,5;17,4145;0,0022;5;5;11,6096;3;1,0;0;82,3002;0;1;2;0;1
+com.example.examplefeature.TaskRepository.findAllBy(Pageable);0;0;0,0;0;0;0,0;NaN;NaN;0;0;NaN;0;0,0;0;0,0;N/A;1;N/A;0;1
+com.example.examplefeature.TaskService.TaskService(TaskRepository);0;0;0,0;0;0;0,5;2,3774;0,0006;3;3;4,7549;3;1,0;0;85,3765;0;1;2;0;1
+com.example.examplefeature.TaskService.createTask(String, LocalDate);1;1;0,8333;6;1;9,75;1095,6088;0,0354;26;20;112,3701;12;0,3333;0;62,0169;1;2;5;0;2
+com.example.examplefeature.TaskService.findAllTasks();0;0;1,0;1;0;1,5;12,0;0,0017;4;4;8,0;4;1,0;0;80,5432;0;1;1;0;0
+com.example.examplefeature.TaskService.list(Pageable);0;0;1,0;2;0;2,0;39,303;0,0039;7;7;19,6515;4;1,0;0;77,9128;0;1;2;0;1
+com.example.examplefeature.ui.TaskListView.TaskListView(TaskService);1;0;0,6087;43;13;43,3929;50907,4252;0,4579;173;110;1173,1752;62;0,25;0;39,3163;3;2;34;0;1
+com.example.examplefeature.ui.TaskListView.createTask();0;0;1,0;8;2;6,25;547,3027;0,0223;21;18;87,5684;8;0,6667;0;66,7195;0;1;6;0;0
+com.example.examplefeature.ui.TaskListView.exportTasksToPdf();1;0;0,8;20;3;17,6522;6508,4915;0,1162;65;51;368,7076;31;0,2;0;49,4082;1;2;10;0;0
+com.example.examplefeature.ui.TaskListView.openCurrencyDialog();3;1;0,6364;22;5;27,125;16537,6392;0,2164;102;63;609,6826;39;0,0;0;45,5782;3;5;16;0;0
+com.example.pdf.PdfGenerator.generateTasksPdfBytes(List<String>, String);7;1;0,6;10;6;22,6087;10155,3013;0,1563;80;49;449,1768;32;0,0;1;48,3339;3;7;14;1;2
+com.example.pdf.PdfGenerator.toInputStream(byte[]);0;0;0,0;0;0;2,5;38,7744;0,0038;6;6;15,5098;3;0,0;0;81,3571;0;1;1;0;1
+com.example.qrcode.QRCodeUtil.generateQRCodePng(String, int, int);0;0;1,0;3;1;6,1875;578,2491;0,0231;22;19;93,4544;12;0,0;0;62,6754;1;1;7;0;3
+email.EmailService.sendEmail(String, String, String);1;0;0,6667;9;3;14,9286;4925,8246;0,0965;62;40;329,9595;32;0,3333;0;49,448;2;2;11;0;N/A
+email.EmailService.sendTaskCreatedNotification(String, String);0;0;0,0;0;0;2,75;171,9032;0,0103;16;15;62,5102;11;0,0;0;64,7327;0;1;4;0;2
