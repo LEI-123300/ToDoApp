@@ -1,6 +1,16 @@
 # App README
 
+- LINK PARA O VIDEO DEMONSTRATIVO : https://youtu.be/hGwiXoOqui0
+
 - [ ] TODO Replace or update this README with instructions relevant to your application
+
+O *workflow* executa os seguintes passos:
+
+1.  **Checkout:** Faz o download do código-fonte do repositório.
+2.  **Setup Java:** Configura o ambiente Java 21[cite: 232].
+3.  **Build with Maven:** Compila o projeto e gera o ficheiro `.jar` executável usando o comando `mvn clean package`[cite: 233].
+4.  **Publish JAR Artifact:** Publica o ficheiro `.jar` gerado como um "artefacto" na secção "Actions" do GitHub, permitindo o seu download[cite: 234].
+5.  **(Opcional) Deploy to Root:** Copia o `.jar` gerado para a raiz do repositório e faz *commit* e *push* dessa alteração, disponibilizando-o diretamente na interface web do GitHub.
 
 ## Project Structure
 
